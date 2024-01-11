@@ -32,6 +32,17 @@ resource "aws_subnet" "public_subnet" {
   }
 }
 
+resource "aws_subnet" "public_subnet2" {
+  vpc_id                  = aws_vpc.vpc.id
+  cidr_block              = "10.0.2.0/24"
+  availability_zone       = "us-east-1b"
+  map_public_ip_on_launch = true
+
+  tags   = {
+    Name = "LoadBalancerSubnet2"
+  }
+}
+
 resource "aws_route_table" "public-route-table" {
   vpc_id      = aws_vpc.vpc.id
 
@@ -45,23 +56,12 @@ resource "aws_route_table" "public-route-table" {
   }
 }
 
-resource "aws_route_table_association" "public-subnet-route-table-association" {
+resource "aws_route_table_association" "public-subnet-route-table-association1" {
   subnet_id       = aws_subnet.public_subnet.id
   route_table_id  = aws_route_table.public-route-table.id
 }
 
-resource "aws_subnet" "public_subnet2" {
-  vpc_id                  = aws_vpc.vpc.id
-  cidr_block              = "10.0.2.0/24"
-  availability_zone       = "us-east-1b"
-  map_public_ip_on_launch = true
-
-  tags   = {
-    Name = "LoadBalancerSubnet2"
-  }
-}
-
-resource "aws_route_table_association" "public-subnet-route-table-association" {
+resource "aws_route_table_association" "public-subnet-route-table-association2" {
   subnet_id       = aws_subnet.public_subnet2.id
   route_table_id  = aws_route_table.public-route-table.id
 }
