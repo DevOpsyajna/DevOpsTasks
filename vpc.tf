@@ -1,3 +1,9 @@
+provider "aws" {
+  region     = "us-east-1"
+  access_key = "my-access-key"
+  secret_key = "my-secret-key"
+}
+
 resource "aws_vpc" "vpc" {
   cidr_block                       = "10.0.0.0/16"
   instance_tenancy                 = "default"
@@ -58,6 +64,44 @@ resource "aws_subnet" "public_subnet2" {
 resource "aws_route_table_association" "public-subnet-route-table-association" {
   subnet_id       = aws_subnet.public_subnet2.id
   route_table_id  = aws_route_table.public-route-table.id
+}
+
+resource "aws_security_group" "SGloadBalancer" {
+  vpc_id = aws_vpc.vpc.id
+  ingress {
+    from_port   = 0
+    protocol    = "-1"
+    to_port     = 0
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    from_port   = 0
+    protocol    = "-1"
+    to_port     = 0
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+resource "aws_instance" "ec21" {
+  ami                    = "ami-053b0d53c279acc90"
+  instance_type          = "t2.micro"
+  key_name               = "devopskey"
+  subnet_id              = aws_subnet.public_subnet.id
+  vpc_security_group_ids = aws_security_group.SGloadBalancer.id
+  tags = {
+    Name = "LBec21"
+  }
+}
+
+resource "aws_instance" "ec22" {
+  ami                    = "ami-053b0d53c279acc90"
+  instance_type          = "t2.micro"
+  key_name               = "devopskey"
+  subnet_id              = aws_subnet.public_subnet2.id
+  vpc_security_group_ids = aws_security_group.SGloadBalancer.id
+  tags = {
+    Name = "LBec22"
+  }
 }
  
  
