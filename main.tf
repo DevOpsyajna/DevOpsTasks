@@ -83,7 +83,7 @@ resource "aws_security_group" "SGloadBalancer" {
 }
 
 resource "aws_instance" "ec21" {
-  ami                    = "ami-0c7217cdde317cfec"
+  ami                    = "ami-0d3f444bc76de0a79"
   instance_type          = "t2.micro"
   key_name               = "devopskey"
   subnet_id              = aws_subnet.public_subnet.id
@@ -94,7 +94,7 @@ resource "aws_instance" "ec21" {
 }
 
 resource "aws_instance" "ec22" {
-  ami                    = "ami-0c7217cdde317cfec"
+  ami                    = "ami-0d3f444bc76de0a79"
   instance_type          = "t2.micro"
   key_name               = "devopskey"
   subnet_id              = aws_subnet.public_subnet2.id
