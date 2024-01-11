@@ -87,7 +87,7 @@ resource "aws_instance" "ec21" {
   instance_type          = "t2.micro"
   key_name               = "devopskey"
   subnet_id              = aws_subnet.public_subnet.id
-  vpc_security_group_ids = aws_security_group.SGloadBalancer.id
+  vpc_security_group_ids = [aws_security_group.SGloadBalancer.id]
   tags = {
     Name = "LBec21"
   }
@@ -98,7 +98,7 @@ resource "aws_instance" "ec22" {
   instance_type          = "t2.micro"
   key_name               = "devopskey"
   subnet_id              = aws_subnet.public_subnet2.id
-  vpc_security_group_ids = aws_security_group.SGloadBalancer.id
+  vpc_security_group_ids = [aws_security_group.SGloadBalancer.id]
   tags = {
     Name = "LBec22"
   }
@@ -130,6 +130,18 @@ resource 'aws_lb_listener" "listener" {
   }
 }
 
+resource "aws_lb" "application-loadBalancer" {
+  name                     = "aws-alb"
+  internal                 = false
+  ip_address_type          = "ipv4"
+  load_balancer_type       = "application"
+  vpc_security_group_ids   = [aws_security_group.SGloadBalancer.id]
+  subnets = [aws_subnet.public_subnet.id,aws_subnet.public_subnet2.id]
+  tags = {
+    Name = "aws-alb"
+  }
+}
+
 resource "aws_lb_target_group_attachment" "tg-attach1" {
   target_group_arn = aws_lb_target_group.targetGroup.arn
   target_id        = aws_instance.ec21.id
@@ -139,8 +151,3 @@ resource "aws_lb_target_group_attachment" "tg-attach2" {
   target_group_arn = aws_lb_target_group.targetGroup.arn
   target_id        = aws_instance.ec22.id
 }
-
-
- 
- 
-
