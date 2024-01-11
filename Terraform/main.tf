@@ -86,6 +86,7 @@ resource "aws_instance" "ec21" {
   ami                    = "ami-03f4878755434977f"
   instance_type          = "t2.micro"
   subnet_id              = aws_subnet.public_subnet.id
+  user_data              = file("shell.sh")
   vpc_security_group_ids = [aws_security_group.SGloadBalancer.id]
   tags = {
     Name = "LBec21"
@@ -96,6 +97,7 @@ resource "aws_instance" "ec22" {
   ami                    = "ami-03f4878755434977f"
   instance_type          = "t2.micro"
   subnet_id              = aws_subnet.public_subnet2.id
+  user_data              = file("shell.sh")
   vpc_security_group_ids = [aws_security_group.SGloadBalancer.id]
   tags = {
     Name = "LBec22"
@@ -148,4 +150,29 @@ resource "aws_lb_target_group_attachment" "tg-attach1" {
 resource "aws_lb_target_group_attachment" "tg-attach2" {
   target_group_arn = aws_lb_target_group.targetGroup.arn
   target_id        = aws_instance.ec22.id
+}
+
+resource "aws_dynamodb_table" "myTable" {
+  name             = "YajnaNarayana"
+  billing_mode     = "PROVISIONED"
+  read_capacity    = 5
+  write_capacity   = 5
+  hash_key         = "yajna@123"
+  attribute {
+    name = "yajna@123"
+    type = "S"
+  }
+  ttl {
+    attribute_name = "TimeToExist"
+    enabled        = false
+  }
+  lifecycle {
+    ignore_changes = [
+      ttl
+    ]
+  }
+  
+  tags = {
+    Name    = "dynamodb-table"
+  }
 }
