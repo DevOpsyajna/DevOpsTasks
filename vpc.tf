@@ -108,7 +108,7 @@ resource "aws_lb_target_group" "targetGroup" {
   health_check {
     interval            = "10"
     path                = "/"
-    protocal            = "HTTP"
+    protocol            = "HTTP"
     timeout             = "5"
     healthy_threshold   = "5"
     unhealthy_threshold = "2"
@@ -120,7 +120,7 @@ resource "aws_lb_target_group" "targetGroup" {
   vpc_id      = aws_vpc.vpc.id
 }
 
-resource 'aws_lb_listener" "listener" {
+resource "aws_lb_listener" "listener" {
   load_balancer_arn = aws_lb.application-loadBalancer.arn
   port              = 80
   protocol          = "HTTP"
@@ -135,7 +135,7 @@ resource "aws_lb" "application-loadBalancer" {
   internal                 = false
   ip_address_type          = "ipv4"
   load_balancer_type       = "application"
-  vpc_security_group_ids   = [aws_security_group.SGloadBalancer.id]
+  security_groups          = [aws_security_group.SGloadBalancer.id]
   subnets = [aws_subnet.public_subnet.id,aws_subnet.public_subnet2.id]
   tags = {
     Name = "aws-alb"
