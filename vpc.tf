@@ -1,7 +1,7 @@
 provider "aws" {
   region     = "us-east-1"
-  access_key = "my-access-key"
-  secret_key = "my-secret-key"
+  access_key = "AKIASI4JF6G2XCFBMGHZ"
+  secret_key = "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"
 }
 
 resource "aws_vpc" "vpc" {
@@ -83,7 +83,7 @@ resource "aws_security_group" "SGloadBalancer" {
 }
 
 resource "aws_instance" "ec21" {
-  ami                    = "ami-053b0d53c279acc90"
+  ami                    = "ami-0c7217cdde317cfec"
   instance_type          = "t2.micro"
   key_name               = "devopskey"
   subnet_id              = aws_subnet.public_subnet.id
@@ -94,7 +94,7 @@ resource "aws_instance" "ec21" {
 }
 
 resource "aws_instance" "ec22" {
-  ami                    = "ami-053b0d53c279acc90"
+  ami                    = "ami-0c7217cdde317cfec"
   instance_type          = "t2.micro"
   key_name               = "devopskey"
   subnet_id              = aws_subnet.public_subnet2.id
